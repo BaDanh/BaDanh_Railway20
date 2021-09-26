@@ -3,12 +3,12 @@ CREATE DATABASE		TestManagemen_1;
 USE				TestManagemen_1;
 
 CREATE TABLE	Department(
-	DepartmentID			VARCHAR(50),	
+	DepartmentID			INT,	
 	DepartmentName			VARCHAR(50)
 );
 
 CREATE TABLE	`Position`(
-	PositionID			VARCHAR(50),	
+	PositionID			INT,	
 	PositionName		VARCHAR(50)
 );
 
@@ -17,61 +17,61 @@ CREATE TABLE	`Account`(
 	Email				VARCHAR(50),
 	Username			VARCHAR(50),	
 	FullName			VARCHAR(100),
-	PositionID			VARCHAR(100),
+	PositionID			INT,
     CreateDate			DATE
 );
 
 CREATE TABLE	`Group`(
-	GroupID				VARCHAR(50),
+	GroupID				INT,
 	GroupName			VARCHAR(50),
 	CreatorID			INT,	
 	CreateDate			DATE
 );
 CREATE TABLE	 GroupAccount(
-	GroupID				VARCHAR(50),
-	AccountID			VARCHAR(50),
+	GroupID				INT,
+	AccountID			INT,
 	JoinDate			DATE
 );
 CREATE TABLE	TypeQuestion(
-	TypeID				VARCHAR(100),
+	TypeID				INT,
     TypeName			VARCHAR(50)
     );
     
 CREATE TABLE	CategoryQuestion(
-	CategoryID			VARCHAR(100),
+	CategoryID			INT,
     CategoryName		VARCHAR(50)
     );
     
 CREATE TABLE	 Question(
-    QuestionID	 		VARCHAR(100),
+    QuestionID	 		INT,
 	Content				VARCHAR(500),
-	CategoryID			VARCHAR(100),	
-	TypeID				VARCHAR(100),
+	CategoryID			INT,	
+	TypeID				INT,
 	CreatorID			INT,
     CreateDate			DATE
 );
 
  CREATE TABLE	  Answer(
-    AnswerID	 		VARCHAR(100),
+    AnswerID	 		INT,
 	Content				VARCHAR(500),
-	QuestionID			VARCHAR(100),	
+	QuestionID			INT,	
 	isCorrect			VARCHAR(100)
 	
 );
 
  CREATE TABLE	 Exam(
-    ExamID	 			VARCHAR(100),
+    ExamID	 			INT,
 	`Code`				INT	,
 	Title				VARCHAR(100),	
-	CategoryID			VARCHAR(100),
-	Duration 			INT,
+	CategoryID			INT,
+	Duration 			DATE,
     CreatorID			INT,
     CreateDate			DATE
 );
 
 CREATE TABLE	  ExamQuestion(
-	ExamID	 			VARCHAR(100),
-	QuestionID			VARCHAR(500)
+	ExamID	 			INT,
+	QuestionID			INT
     );
 
 
