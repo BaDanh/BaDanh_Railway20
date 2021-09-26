@@ -3,8 +3,8 @@ CREATE DATABASE		TestManagemen_1;
 USE				TestManagemen_1;
 
 CREATE TABLE	Department(
-	DepartmentID			INT,	
-	DepartmentName			VARCHAR(50)
+	DepartmentID		INT,	
+	DepartmentName		VARCHAR(50)
 );
 
 CREATE TABLE	`Position`(
@@ -17,6 +17,7 @@ CREATE TABLE	`Account`(
 	Email				VARCHAR(50),
 	Username			VARCHAR(50),	
 	FullName			VARCHAR(100),
+	DepartmentID		INT,
 	PositionID			INT,
     CreateDate			DATE
 );
@@ -35,12 +36,12 @@ CREATE TABLE	 GroupAccount(
 CREATE TABLE	TypeQuestion(
 	TypeID				INT,
     TypeName			VARCHAR(50)
-    );
+);
     
 CREATE TABLE	CategoryQuestion(
 	CategoryID			INT,
     CategoryName		VARCHAR(50)
-    );
+);
     
 CREATE TABLE	 Question(
     QuestionID	 		INT,
@@ -72,7 +73,7 @@ CREATE TABLE	 Question(
 CREATE TABLE	  ExamQuestion(
 	ExamID	 			INT,
 	QuestionID			INT
-    );
+);
 
 
         
