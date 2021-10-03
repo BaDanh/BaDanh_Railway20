@@ -1,76 +1,100 @@
-DROP DATABASE IF EXISTS TestManagemen_2;
-CREATE DATABASE		TestManagemen_2;
-USE				TestManagemen_2;
+DROP DATABASE IF EXISTS Testing_System_Assignment_3;
+CREATE DATABASE		Testing_System_Assignment_3;
+USE				Testing_System_Assignment_3;
 
-CREATE TABLE	Department(
-	DepartmentID		SMALLINT UNSIGNED PRIMARY KEY,	
-	DepartmentName		VARCHAR(50) CHECK (LENGTH(DepartmentName) >=4 )
-);
-
-CREATE TABLE	`Position`(
-	PositionID			SMALLINT UNSIGNED,	
-	PositionName		VARCHAR(50) CHECK (LENGTH(PositionName) >=2 )
+-- Tạo bảng Department
+CREATE TABLE IF NOT EXISTS Department(
+	DepartmentID 			TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    DepartmentName 			NVARCHAR(30) NOT NULL UNIQUE KEY
 );
 
-CREATE TABLE	`Account`(
-	AccountID			SMALLINT UNSIGNED,
-	Email				VARCHAR(50),
-	Username			VARCHAR(50) CHECK(LENGTH(Username) >=4),	
-	FullName			VARCHAR(50) CHECK(LENGTH(FullName) >=7),
-	DepartmentID	    SMALLINT UNSIGNED,
-	PositionID		     SMALLINT UNSIGNED,
-    CreateDate			DATETIME
+-- Tạo bảng Posittion
+CREATE TABLE IF NOT EXISTS `Position` (
+	PositionID				TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    PositionName			ENUM('Dev','Test','Scrum Master','PM') NOT NULL UNIQUE KEY
 );
 
-CREATE TABLE	`Group`(
-	GroupID				SMALLINT UNSIGNED,
-	GroupName			VARCHAR(50) CHECK (LENGTH(GroupName) >=6 ),
-	CreatorID			TINYINT UNIQUE,	
-	CreateDate			DATETIME
-);
-CREATE TABLE	 GroupAccount(
-	GroupID				SMALLINT UNSIGNED,
-	AccountID			SMALLINT UNSIGNED,
-	JoinDate			DATETIME
-);
-CREATE TABLE	TypeQuestion(
-	TypeID				INT,
-    TypeName			VARCHAR(100)
-);
-    
-CREATE TABLE	CategoryQuestion(
-	CategoryID			SMALLINT UNSIGNED NOT NULL,
-    CategoryName		VARCHAR(50)
-);
-    
-CREATE TABLE	 Question(
-    QuestionID	 		SMALLINT UNSIGNED PRIMARY KEY,
-	Content				VARCHAR(500),
-	CategoryID			SMALLINT UNSIGNED,	
-	TypeID				SMALLINT UNSIGNED,
-	CreatorID			SMALLINT UNSIGNED,
-    CreateDate			DATETIME
+--  Tạo bảng: Account
+CREATE TABLE IF NOT EXISTS `Account`(
+	AccountID				INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    Email					VARCHAR(50) NOT NULL UNIQUE KEY,
+    Username				VARCHAR(50) NOT NULL UNIQUE KEY,
+    FullName				NVARCHAR(50) NOT NULL,
+    DepartmentID 			TINYINT UNSIGNED NOT NULL,
+    PositionID				TINYINT UNSIGNED NOT NULL,
+    CreateDate				DATETIME,
+    FOREIGN KEY(DepartmentID) REFERENCES Department(DepartmentID),
+    FOREIGN KEY(PositionID)   REFERENCES `Position`(PositionID)
 );
 
- CREATE TABLE	  Answer(
-    AnswerID	 		SMALLINT UNSIGNED,
-	Content				VARCHAR(500),
-	QuestionID		    SMALLINT UNSIGNED,	
-	isCorrect			ENUM ('Đúng','Sai')
+--  Tạo bảng: Group
+CREATE TABLE IF NOT EXISTS `Group`(
+	GroupID					TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    GroupName				NVARCHAR(50) NOT NULL UNIQUE KEY,
+    CreatorID				INT UNSIGNED,
+    CreateDate				DATETIME,
+    FOREIGN KEY(CreatorID) 	REFERENCES `Account`(AccountId)
 );
 
- CREATE TABLE	 Exam(
-    ExamID	 			SMALLINT UNSIGNED PRIMARY KEY,
-	`Code`				SMALLINT,
-	Title				VARCHAR(100),	
-	CategoryID			SMALLINT UNSIGNED,
-	Duration 			DATETIME,
-    CreatorID			SMALLINT UNSIGNED,
-    CreateDate			DATETIME
+--  Tạo bảng GroupAccount
+CREATE TABLE IF NOT EXISTS GroupAccount(
+	GroupID					TINYINT UNSIGNED NOT NULL,
+    AccountID				INT UNSIGNED NOT NULL,
+    JoinDate				DATETIME,
+    FOREIGN KEY(GroupID) REFERENCES `Group`(GroupID) 
 );
 
-CREATE TABLE	  ExamQuestion(
-	ExamID	 			SMALLINT UNSIGNED,
-	QuestionID			SMALLINT UNSIGNED
+-- c Tạo bảng TypeQuestion
+CREATE TABLE IF NOT EXISTS TypeQuestion (
+    TypeID 			INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    TypeName 		ENUM('Essay','Multiple-Choice')
 );
 
+--  Tạo bảng CategoryQuestion
+CREATE TABLE IF NOT EXISTS CategoryQuestion(
+    CategoryID				INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    CategoryName			NVARCHAR(50) NOT NULL UNIQUE KEY
+);
+
+--  Tạo bảng Question
+CREATE TABLE IF NOT EXISTS Question(
+    QuestionID				INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    Content					NVARCHAR(100) NOT NULL,
+    CategoryID				INT UNSIGNED NOT NULL,
+    TypeID					INT UNSIGNED NOT NULL,
+    CreatorID				INT UNSIGNED NOT NULL,
+    CreateDate				DATETIME,
+    FOREIGN KEY(CategoryID) 	REFERENCES CategoryQuestion(CategoryID),
+    FOREIGN KEY(TypeID) 		REFERENCES TypeQuestion(TypeID),
+    FOREIGN KEY(CreatorID) 		REFERENCES `Account`(AccountId) 
+);
+
+--  Tạo bảng Answer
+CREATE TABLE IF NOT EXISTS Answer(
+    AnswerID				INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    Content					NVARCHAR(100) NOT NULL,
+    QuestionID				INT UNSIGNED NOT NULL,
+    isCorrect				Boolean,
+    FOREIGN KEY(QuestionID) REFERENCES Question(QuestionID)
+);
+
+--  Tạo bảng Exam
+CREATE TABLE IF NOT EXISTS Exam(
+    ExamID					INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `Code`					VARCHAR(10),
+    Title					NVARCHAR(50) ,
+    CategoryID				INT UNSIGNED ,
+    Duration				INT UNSIGNED,
+    CreatorID				INT UNSIGNED,
+    CreateDate				DATETIME,
+    FOREIGN KEY(CategoryID) REFERENCES CategoryQuestion(CategoryID),
+    FOREIGN KEY(CreatorID) 	REFERENCES `Account`(AccountId)
+);
+
+--  Tạo bảng ExamQuestion
+CREATE TABLE IF NOT EXISTS ExamQuestion(
+    ExamID				INT UNSIGNED ,
+	QuestionID			INT UNSIGNED,
+    FOREIGN KEY(QuestionID) REFERENCES Question(QuestionID),
+    FOREIGN KEY(ExamID)     REFERENCES Exam(ExamID)
+);
